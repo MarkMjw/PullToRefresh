@@ -1,0 +1,7 @@
+<resources>
+
+    <color name="transparent">#00000000</color>
+    <color name="background">#F7F4F0</color>
+    <color name="title_color">#333333</color>
+
+</resources>
