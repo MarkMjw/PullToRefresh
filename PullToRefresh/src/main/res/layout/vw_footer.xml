@@ -5,7 +5,6 @@
     android:padding="@dimen/footer_padding" >
 
     <RelativeLayout
-        android:id="@+id/footer_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 

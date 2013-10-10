@@ -21,12 +21,10 @@ public class XFooterView extends LinearLayout {
     public final static int STATE_READY = 1;
     public final static int STATE_LOADING = 2;
 
-    private Context mContext;
-
-    private View mContentView;
+    private View mLayout;
     private View mProgressBar;
     private TextView mHintView;
-    //private ImageView mHintImage;
+//    private ImageView mHintImage;
 
     private Animation mRotateUpAnim;
     private Animation mRotateDownAnim;
@@ -60,19 +58,19 @@ public class XFooterView extends LinearLayout {
 
         switch (state) {
             case STATE_NORMAL:
-//            if (mState == STATE_READY) {
-//                mHintImage.startAnimation(mRotateDownAnim);
-//            }
-//            if (mState == STATE_LOADING) {
-//                mHintImage.clearAnimation();
-//            }
+//                if (mState == STATE_READY) {
+//                    mHintImage.startAnimation(mRotateDownAnim);
+//                }
+//                if (mState == STATE_LOADING) {
+//                    mHintImage.clearAnimation();
+//                }
                 mHintView.setText(R.string.footer_hint_load_normal);
                 break;
 
             case STATE_READY:
                 if (mState != STATE_READY) {
-//                mHintImage.clearAnimation();
-//                mHintImage.startAnimation(mRotateUpAnim);
+//                    mHintImage.clearAnimation();
+//                    mHintImage.startAnimation(mRotateUpAnim);
                     mHintView.setText(R.string.footer_hint_load_ready);
                 }
                 break;
@@ -85,13 +83,13 @@ public class XFooterView extends LinearLayout {
 
     public void setBottomMargin(int height) {
         if (height < 0) return;
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mContentView.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLayout.getLayoutParams();
         lp.bottomMargin = height;
-        mContentView.setLayoutParams(lp);
+        mLayout.setLayoutParams(lp);
     }
 
     public int getBottomMargin() {
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mContentView.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLayout.getLayoutParams();
         return lp.bottomMargin;
     }
 
@@ -115,33 +113,29 @@ public class XFooterView extends LinearLayout {
      * hide footer when disable pull load more
      */
     public void hide() {
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mContentView.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLayout.getLayoutParams();
         lp.height = 0;
-        mContentView.setLayoutParams(lp);
+        mLayout.setLayoutParams(lp);
     }
 
     /**
      * show footer
      */
     public void show() {
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mContentView.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLayout.getLayoutParams();
         lp.height = LayoutParams.WRAP_CONTENT;
-        mContentView.setLayoutParams(lp);
+        mLayout.setLayoutParams(lp);
     }
 
     private void initView(Context context) {
-        mContext = context;
-        LinearLayout moreView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout
-                .vw_footer, null);
-        addView(moreView);
-        moreView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+        mLayout = LayoutInflater.from(context).inflate(R.layout.vw_footer, null);
+        mLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT));
+        addView(mLayout);
 
-        mContentView = moreView.findViewById(R.id.footer_content);
-        mProgressBar = moreView.findViewById(R.id.footer_progressbar);
-        mHintView = (TextView) moreView.findViewById(R.id.footer_hint_text);
-//        mHintImage = (ImageView) moreView
-//                .findViewById(R.id.footer_arrow);
+        mProgressBar = mLayout.findViewById(R.id.footer_progressbar);
+        mHintView = (TextView) mLayout.findViewById(R.id.footer_hint_text);
+//        mHintImage = (ImageView) mLayout.findViewById(R.id.footer_arrow);
 
         mRotateUpAnim = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
