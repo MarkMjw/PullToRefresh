@@ -114,7 +114,10 @@ public void onLoadMore() {
 ```
 
 ##Screenshots
-![Screenshot 0](http://git.oschina.net/xiangmao/PullToRefresh/raw/master/Screenshots/0.png)
-![Screenshot 1](http://git.oschina.net/xiangmao/PullToRefresh/raw/master/Screenshots/1.png)
-![Screenshot 2](http://git.oschina.net/xiangmao/PullToRefresh/raw/master/Screenshots/2.png)
-![Screenshot 3](http://git.oschina.net/xiangmao/PullToRefresh/raw/master/Screenshots/3.png)
+![Screenshot 0](https://raw.github.com/MarkMjw/PullToRefresh/master/Screenshots/0.png)
+
+![Screenshot 1](https://raw.github.com/MarkMjw/PullToRefresh/master/Screenshots/1.png)
+
+![Screenshot 2](https://raw.github.com/MarkMjw/PullToRefresh/master/Screenshots/2.png)
+
+![Screenshot 3](https://raw.github.com/MarkMjw/PullToRefresh/master/Screenshots/3.png)
