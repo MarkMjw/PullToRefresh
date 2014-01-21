@@ -1,7 +1,9 @@
 package com.markmao.pulltorefresh.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.os.Build;
 import android.view.*;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.DecelerateInterpolator;
@@ -96,12 +98,18 @@ public class XScrollView extends ScrollView implements OnScrollListener {
         ViewTreeObserver observer = mHeaderView.getViewTreeObserver();
         if (null != observer) {
             observer.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+				@SuppressWarnings("deprecation")
                 @Override
                 public void onGlobalLayout() {
                     mHeaderViewHeight = mHeaderViewContent.getHeight();
                     ViewTreeObserver observer = getViewTreeObserver();
                     if (null != observer) {
-                        observer.removeOnGlobalLayoutListener(this);
+						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+							observer.removeGlobalOnLayoutListener(this);
+						} else {
+							observer.removeOnGlobalLayoutListener(this);
+						}
                     }
                 }
             });
