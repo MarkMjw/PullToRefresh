@@ -99,12 +99,18 @@ public class XListView extends ListView implements OnScrollListener {
         ViewTreeObserver observer = mHeaderView.getViewTreeObserver();
         if (null != observer) {
             observer.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@SuppressWarnings("deprecation")
+				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
                 @Override
                 public void onGlobalLayout() {
                     mHeaderViewHeight = mHeaderViewContent.getHeight();
                     ViewTreeObserver observer = getViewTreeObserver();
                     if (null != observer) {
-                        observer.removeOnGlobalLayoutListener(this);
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+							observer.removeGlobalOnLayoutListener(this);
+						} else {
+							observer.removeOnGlobalLayoutListener(this);
+						}
                     }
                 }
             });
