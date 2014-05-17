@@ -22,8 +22,8 @@ import java.util.Locale;
 /**
  * XScrollView demo
  *
- * @author MarkMjw
- * @date 13-10-08.
+ * @author markmjw
+ * @date 2013-10-08
  */
 public class XScrollViewActivity extends Activity implements XScrollView.IXScrollViewListener {
     private XScrollView mScrollView;
@@ -36,11 +36,6 @@ public class XScrollViewActivity extends Activity implements XScrollView.IXScrol
     private int mIndex = 0;
     private static int mRefreshIndex = 0;
 
-    /**
-     * 启动
-     *
-     * @param context
-     */
     public static void launch(Context context) {
         Intent intent = new Intent();
         intent.setClass(context, XScrollViewActivity.class);
@@ -129,7 +124,7 @@ public class XScrollViewActivity extends Activity implements XScrollView.IXScrol
     }
 
     private int measureHeight() {
-        // 获取ListView对应的Adapter
+        // get ListView adapter
         ListAdapter adapter = mListView.getAdapter();
         if (null == adapter) {
             return 0;
@@ -140,9 +135,9 @@ public class XScrollViewActivity extends Activity implements XScrollView.IXScrol
         for (int i = 0, len = adapter.getCount(); i < len; i++) {
             View item = adapter.getView(i, null, mListView);
             if (null == item) continue;
-            // 计算子项View 的宽高
+            // measure each item width and height
             item.measure(0, 0);
-            // 统计所有子项的总高度
+            // calculate all height
             totalHeight += item.getMeasuredHeight();
         }
 
@@ -153,7 +148,7 @@ public class XScrollViewActivity extends Activity implements XScrollView.IXScrol
                     ViewGroup.LayoutParams.WRAP_CONTENT);
         }
 
-        // 最后得到整个ListView完整显示需要的高度
+        // calculate ListView height
         params.height = totalHeight + (mListView.getDividerHeight() * (adapter.getCount() - 1));
 
         mListView.setLayoutParams(params);

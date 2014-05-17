@@ -11,25 +11,30 @@ import android.widget.TextView;
 import com.markmao.pulltorefresh.R;
 
 /**
- * @author Maxwin
- * @file XFooterView.java
- * @create Mar 31, 2012 9:33:43 PM
- * @description XListView's footer
+ * The footer view for {@link com.markmao.pulltorefresh.widget.XListView} and
+ * {@link com.markmao.pulltorefresh.widget.XScrollView}
+ *
+ * @author markmjw
+ * @date 2013-10-08
  */
 public class XFooterView extends LinearLayout {
     public final static int STATE_NORMAL = 0;
     public final static int STATE_READY = 1;
     public final static int STATE_LOADING = 2;
 
+    private final int ROTATE_ANIM_DURATION = 180;
+
     private View mLayout;
+
     private View mProgressBar;
+
     private TextView mHintView;
+
 //    private ImageView mHintImage;
 
     private Animation mRotateUpAnim;
     private Animation mRotateDownAnim;
 
-    private final int ROTATE_ANIM_DURATION = 180;
     private int mState = STATE_NORMAL;
 
     public XFooterView(Context context) {
@@ -42,6 +47,36 @@ public class XFooterView extends LinearLayout {
         initView(context);
     }
 
+    private void initView(Context context) {
+        mLayout = LayoutInflater.from(context).inflate(R.layout.vw_footer, null);
+        mLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        addView(mLayout);
+
+        mProgressBar = mLayout.findViewById(R.id.footer_progressbar);
+        mHintView = (TextView) mLayout.findViewById(R.id.footer_hint_text);
+//        mHintImage = (ImageView) mLayout.findViewById(R.id.footer_arrow);
+
+        mRotateUpAnim = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mRotateUpAnim.setDuration(ROTATE_ANIM_DURATION);
+        mRotateUpAnim.setFillAfter(true);
+
+        mRotateDownAnim = new RotateAnimation(180.0f, 0.0f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mRotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
+        mRotateDownAnim.setFillAfter(true);
+    }
+
+    /**
+     * Set footer view state
+     *
+     * @see #STATE_LOADING
+     * @see #STATE_NORMAL
+     * @see #STATE_READY
+     *
+     * @param state
+     */
     public void setState(int state) {
         if (state == mState) return;
 
@@ -78,16 +113,27 @@ public class XFooterView extends LinearLayout {
             case STATE_LOADING:
                 break;
         }
+
         mState = state;
     }
 
-    public void setBottomMargin(int height) {
-        if (height < 0) return;
+    /**
+     * Set footer view bottom margin.
+     *
+     * @param margin
+     */
+    public void setBottomMargin(int margin) {
+        if (margin < 0) return;
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLayout.getLayoutParams();
-        lp.bottomMargin = height;
+        lp.bottomMargin = margin;
         mLayout.setLayoutParams(lp);
     }
 
+    /**
+     * Get footer view bottom margin.
+     *
+     * @return
+     */
     public int getBottomMargin() {
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLayout.getLayoutParams();
         return lp.bottomMargin;
@@ -125,26 +171,6 @@ public class XFooterView extends LinearLayout {
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mLayout.getLayoutParams();
         lp.height = LayoutParams.WRAP_CONTENT;
         mLayout.setLayoutParams(lp);
-    }
-
-    private void initView(Context context) {
-        mLayout = LayoutInflater.from(context).inflate(R.layout.vw_footer, null);
-        mLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT));
-        addView(mLayout);
-
-        mProgressBar = mLayout.findViewById(R.id.footer_progressbar);
-        mHintView = (TextView) mLayout.findViewById(R.id.footer_hint_text);
-//        mHintImage = (ImageView) mLayout.findViewById(R.id.footer_arrow);
-
-        mRotateUpAnim = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        mRotateUpAnim.setDuration(ROTATE_ANIM_DURATION);
-        mRotateUpAnim.setFillAfter(true);
-        mRotateDownAnim = new RotateAnimation(180.0f, 0.0f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        mRotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
-        mRotateDownAnim.setFillAfter(true);
     }
 
 }

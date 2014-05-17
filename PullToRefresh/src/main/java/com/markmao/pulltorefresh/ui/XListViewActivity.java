@@ -17,7 +17,7 @@ import java.util.Locale;
 /**
  * XListView demo
  *
- * @author MarkMjw
+ * @author markmjw
  * @date 2013-10-08
  */
 public class XListViewActivity extends Activity implements XListView.IXListViewListener {
@@ -29,11 +29,6 @@ public class XListViewActivity extends Activity implements XListView.IXListViewL
     private int mIndex = 0;
     private static int mRefreshIndex = 0;
 
-    /**
-     * 启动
-     *
-     * @param context
-     */
     public static void launch(Context context) {
         Intent intent = new Intent();
         intent.setClass(context, XListViewActivity.class);
