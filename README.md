@@ -3,8 +3,11 @@ PullToRefresh
 
 *注：本项目使用Android Studio开发*
 
-根据Maxwin的XListView改造而来，完善下拉刷新上拉加载更多的功能，并增加对ScrollView的支持。<br>
-部分实现思想来源于网络。<br>
+### 根据Maxwin的XListView改造而来: ###
+    1.完善下拉刷新上拉加载更多的功能
+    2.并增加对ScrollView的支持
+    3.增加自动刷新以及滚动到底部自动加载功能
+
 原XListView参考链接：https://github.com/Maxwin-z/XListView-Android<br>
 
 ## **XListView使用示例** ##
