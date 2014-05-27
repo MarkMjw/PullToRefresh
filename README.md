@@ -17,6 +17,7 @@ PullToRefresh
 mListView = (XListView) findViewById(R.id.list_view);
 mListView.setPullRefreshEnable(true);
 mListView.setPullLoadEnable(true);
+mListView.setAutoLoadEnable(true);
 mListView.setXListViewListener(this);
 mListView.setRefreshTime(getTime());
 
@@ -43,6 +44,14 @@ public void onRefresh() {
 }
 
 @Override
+public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+    if (hasFocus) {
+        mListView.autoRefresh();
+    }
+}
+
+@Override
 public void onLoadMore() {
     mHandler.postDelayed(new Runnable() {
         @Override
@@ -63,6 +72,7 @@ public void onLoadMore() {
 mScrollView = (XScrollView) findViewById(R.id.scroll_view);
 mScrollView.setPullRefreshEnable(true);
 mScrollView.setPullLoadEnable(true);
+mScrollView.setAutoLoadEnable(true);
 mScrollView.setIXScrollViewListener(this);
 mScrollView.setRefreshTime(getTime());
 
@@ -98,6 +108,15 @@ public void onRefresh() {
             onLoad();
         }
     }, 2500);
+}
+
+@Override
+public void onWindowFocusChanged(boolean hasFocus) {
+   super.onWindowFocusChanged(hasFocus);
+
+   if (hasFocus) {
+       mScrollView.autoRefresh();
+   }
 }
 
 @Override
