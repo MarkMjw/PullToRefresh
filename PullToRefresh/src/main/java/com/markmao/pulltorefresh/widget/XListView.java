@@ -65,6 +65,7 @@ public class XListView extends ListView implements OnScrollListener {
 
     private boolean mEnablePullRefresh = true;
     private boolean mEnablePullLoad = true;
+    private boolean mEnableAutoLoad = false;
 
     private boolean mPullRefreshing = false;
     private boolean mPullLoading = false;
@@ -181,6 +182,15 @@ public class XListView extends ListView implements OnScrollListener {
     }
 
     /**
+     * Enable or disable auto load more feature when scroll to bottom.
+     *
+     * @param enable
+     */
+    public void setAutoLoadEnable(boolean enable) {
+        mEnableAutoLoad = enable;
+    }
+
+    /**
      * Stop refresh, reset header view.
      */
     public void stopRefresh() {
@@ -216,6 +226,26 @@ public class XListView extends ListView implements OnScrollListener {
      */
     public void setXListViewListener(IXListViewListener listener) {
         mListener = listener;
+    }
+
+    /**
+     * Auto call back refresh.
+     */
+    public void autoRefresh() {
+        mHeader.setVisibleHeight(mHeaderHeight);
+
+        if (mEnablePullRefresh && !mPullRefreshing) {
+            // update the arrow image not refreshing
+            if (mHeader.getVisibleHeight() > mHeaderHeight) {
+                mHeader.setState(XHeaderView.STATE_READY);
+            } else {
+                mHeader.setState(XHeaderView.STATE_NORMAL);
+            }
+        }
+
+        mPullRefreshing = true;
+        mHeader.setState(XHeaderView.STATE_REFRESHING);
+        refresh();
     }
 
     private void invokeOnScrolling() {
@@ -293,10 +323,7 @@ public class XListView extends ListView implements OnScrollListener {
     private void startLoadMore() {
         mPullLoading = true;
         mFooterView.setState(XFooterView.STATE_LOADING);
-
-        if (mListener != null) {
-            mListener.onLoadMore();
-        }
+        loadMore();
     }
 
     @Override
@@ -335,9 +362,7 @@ public class XListView extends ListView implements OnScrollListener {
                     if (mEnablePullRefresh && mHeader.getVisibleHeight() > mHeaderHeight) {
                         mPullRefreshing = true;
                         mHeader.setState(XHeaderView.STATE_REFRESHING);
-                        if (mListener != null) {
-                            mListener.onRefresh();
-                        }
+                        refresh();
                     }
 
                     resetHeaderHeight();
@@ -380,6 +405,12 @@ public class XListView extends ListView implements OnScrollListener {
         if (mScrollListener != null) {
             mScrollListener.onScrollStateChanged(view, scrollState);
         }
+
+        if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+            if (mEnableAutoLoad && getLastVisiblePosition() == getCount() - 1) {
+                startLoadMore();
+            }
+        }
     }
 
     @Override
@@ -389,6 +420,18 @@ public class XListView extends ListView implements OnScrollListener {
         mTotalItemCount = totalItemCount;
         if (mScrollListener != null) {
             mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
+    }
+
+    private void refresh() {
+        if (mEnablePullRefresh && null != mListener) {
+            mListener.onRefresh();
+        }
+    }
+
+    private void loadMore() {
+        if (mEnablePullLoad && null != mListener) {
+            mListener.onLoadMore();
         }
     }
 

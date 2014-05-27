@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ArrayAdapter;
+
 import com.markmao.pulltorefresh.R;
 import com.markmao.pulltorefresh.widget.XListView;
 
@@ -27,7 +28,7 @@ public class XListViewActivity extends Activity implements XListView.IXListViewL
     private ArrayList<String> items = new ArrayList<String>();
     private Handler mHandler;
     private int mIndex = 0;
-    private static int mRefreshIndex = 0;
+    private int mRefreshIndex = 0;
 
     public static void launch(Context context) {
         Intent intent = new Intent();
@@ -52,11 +53,21 @@ public class XListViewActivity extends Activity implements XListView.IXListViewL
         mListView = (XListView) findViewById(R.id.list_view);
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadEnable(true);
+        mListView.setAutoLoadEnable(true);
         mListView.setXListViewListener(this);
         mListView.setRefreshTime(getTime());
 
         mAdapter = new ArrayAdapter<String>(this, R.layout.vw_list_item, items);
         mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            mListView.autoRefresh();
+        }
     }
 
     @Override
@@ -67,7 +78,6 @@ public class XListViewActivity extends Activity implements XListView.IXListViewL
                 mIndex = ++mRefreshIndex;
                 items.clear();
                 geneItems();
-                // mAdapter.notifyDataSetChanged();
                 mAdapter = new ArrayAdapter<String>(XListViewActivity.this, R.layout.vw_list_item,
                         items);
                 mListView.setAdapter(mAdapter);
