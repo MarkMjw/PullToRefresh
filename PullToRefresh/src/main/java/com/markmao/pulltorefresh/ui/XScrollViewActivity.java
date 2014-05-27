@@ -34,7 +34,7 @@ public class XScrollViewActivity extends Activity implements XScrollView.IXScrol
     private ArrayList<String> mItems = new ArrayList<String>();
     private Handler mHandler;
     private int mIndex = 0;
-    private static int mRefreshIndex = 0;
+    private int mRefreshIndex = 0;
 
     public static void launch(Context context) {
         Intent intent = new Intent();
@@ -59,6 +59,7 @@ public class XScrollViewActivity extends Activity implements XScrollView.IXScrol
         mScrollView = (XScrollView) findViewById(R.id.scroll_view);
         mScrollView.setPullRefreshEnable(true);
         mScrollView.setPullLoadEnable(true);
+        mScrollView.setAutoLoadEnable(true);
         mScrollView.setIXScrollViewListener(this);
         mScrollView.setRefreshTime(getTime());
 
@@ -75,6 +76,15 @@ public class XScrollViewActivity extends Activity implements XScrollView.IXScrol
         }
 
         mScrollView.setView(content);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            mScrollView.autoRefresh();
+        }
     }
 
     @Override

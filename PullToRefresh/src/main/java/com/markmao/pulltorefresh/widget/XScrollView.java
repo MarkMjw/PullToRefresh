@@ -2,13 +2,22 @@ package com.markmao.pulltorefresh.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.util.AttributeSet;
 import android.os.Build;
-import android.view.*;
+import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.*;
+import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Scroller;
+import android.widget.TextView;
 
 import com.markmao.pulltorefresh.R;
 
@@ -60,6 +69,7 @@ public class XScrollView extends ScrollView implements OnScrollListener {
     private boolean mPullRefreshing = false;
 
     private boolean mEnablePullLoad = true;
+    private boolean mEnableAutoLoad = false;
     private boolean mPullLoading = false;
 
     public XScrollView(Context context) {
@@ -203,6 +213,15 @@ public class XScrollView extends ScrollView implements OnScrollListener {
     }
 
     /**
+     * Enable or disable auto load more feature when scroll to bottom.
+     *
+     * @param enable
+     */
+    public void setAutoLoadEnable(boolean enable) {
+        mEnableAutoLoad = enable;
+    }
+
+    /**
      * Stop refresh, reset header view.
      */
     public void stopRefresh() {
@@ -238,6 +257,26 @@ public class XScrollView extends ScrollView implements OnScrollListener {
      */
     public void setIXScrollViewListener(IXScrollViewListener listener) {
         mListener = listener;
+    }
+
+    /**
+     * Auto call back refresh.
+     */
+    public void autoRefresh() {
+        mHeader.setVisibleHeight(mHeaderHeight);
+
+        if (mEnablePullRefresh && !mPullRefreshing) {
+            // update the arrow image not refreshing
+            if (mHeader.getVisibleHeight() > mHeaderHeight) {
+                mHeader.setState(XHeaderView.STATE_READY);
+            } else {
+                mHeader.setState(XHeaderView.STATE_NORMAL);
+            }
+        }
+
+        mPullRefreshing = true;
+        mHeader.setState(XHeaderView.STATE_REFRESHING);
+        refresh();
     }
 
     private void invokeOnScrolling() {
@@ -323,11 +362,10 @@ public class XScrollView extends ScrollView implements OnScrollListener {
     }
 
     private void startLoadMore() {
-        mPullLoading = true;
-        mFooterView.setState(XFooterView.STATE_LOADING);
-
-        if (mListener != null) {
-            mListener.onLoadMore();
+        if (!mPullLoading) {
+            mPullLoading = true;
+            mFooterView.setState(XFooterView.STATE_LOADING);
+            loadMore();
         }
     }
 
@@ -375,10 +413,7 @@ public class XScrollView extends ScrollView implements OnScrollListener {
             if (mEnablePullRefresh && mHeader.getVisibleHeight() > mHeaderHeight) {
                 mPullRefreshing = true;
                 mHeader.setState(XHeaderView.STATE_REFRESHING);
-
-                if (mListener != null) {
-                    mListener.onRefresh();
-                }
+                refresh();
             }
             resetHeaderHeight();
 
@@ -427,11 +462,42 @@ public class XScrollView extends ScrollView implements OnScrollListener {
     }
 
     @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        // Grab the last child placed in the ScrollView, we need it to determinate the bottom position.
+        View view = getChildAt(getChildCount() - 1);
+
+        if (null != view) {
+            // Calculate the scroll diff
+            int diff = (view.getBottom() - (view.getHeight() + view.getScrollY()));
+
+            // if diff is zero, then the bottom has been reached
+            if (diff == 0 && mEnableAutoLoad) {
+                // notify that we have reached the bottom
+                startLoadMore();
+            }
+        }
+
+        super.onScrollChanged(l, t, oldl, oldt);
+    }
+
+    @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                          int totalItemCount) {
         // send to user's listener
         if (mScrollListener != null) {
             mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
+    }
+
+    private void refresh() {
+        if (mEnablePullRefresh && null != mListener) {
+            mListener.onRefresh();
+        }
+    }
+
+    private void loadMore() {
+        if (mEnablePullLoad && null != mListener) {
+            mListener.onLoadMore();
         }
     }
 

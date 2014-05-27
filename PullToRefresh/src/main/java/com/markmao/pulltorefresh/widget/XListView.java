@@ -64,10 +64,10 @@ public class XListView extends ListView implements OnScrollListener {
     private boolean mIsFooterReady = false;
 
     private boolean mEnablePullRefresh = true;
+    private boolean mPullRefreshing = false;
+
     private boolean mEnablePullLoad = true;
     private boolean mEnableAutoLoad = false;
-
-    private boolean mPullRefreshing = false;
     private boolean mPullLoading = false;
 
     // total list items, used to detect is at the bottom of ListView
