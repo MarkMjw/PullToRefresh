@@ -1,16 +1,16 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion "19.0.3"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
 	compileOptions.encoding = "UTF-8"
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 19
+        targetSdkVersion 21
     }
 }
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:19.+'
+	compile 'com.android.support:appcompat-v7:21.0.3'
 }

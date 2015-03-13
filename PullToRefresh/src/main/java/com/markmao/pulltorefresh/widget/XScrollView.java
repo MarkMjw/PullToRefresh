@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -427,7 +428,7 @@ public class XScrollView extends ScrollView implements OnScrollListener {
     }
 
     private boolean isTop() {
-        return getScrollY() <= 0 || mHeader.getVisibleHeight() > mHeaderHeight;
+        return getScrollY() <= 0 || mHeader.getVisibleHeight() > mHeaderHeight || mContentLayout.getTop() > 0;
     }
 
     private boolean isBottom() {
