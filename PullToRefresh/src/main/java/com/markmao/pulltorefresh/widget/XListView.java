@@ -163,7 +163,7 @@ public class XListView extends ListView implements OnScrollListener {
         if (!mEnablePullLoad) {
             mFooterView.setBottomMargin(0);
             mFooterView.hide();
-            mFooterView.setPadding(0, 0, 0, mFooterView.getHeight() * (-1));
+            mFooterView.setPadding(0, 0, 0, 0);
             mFooterView.setOnClickListener(null);
 
         } else {
