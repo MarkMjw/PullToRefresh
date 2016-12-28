@@ -142,7 +142,7 @@ public class XHeaderView extends LinearLayout {
      * @return
      */
     public int getVisibleHeight() {
-        return mContainer.getHeight();
+        return mContainer.getLayoutParams().height;
     }
 
 }
